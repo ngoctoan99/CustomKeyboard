@@ -52,5 +52,16 @@
             android:background="@color/theme_dark_background_color" />
 
     </LinearLayout>
+    <com.example.customkeyboard.lib.ui.emoji.EmojiKeyboard
+        android:id="@+id/keyboard_emoji"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/mock_measure_height_keyboard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/mock_measure_height_keyboard" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

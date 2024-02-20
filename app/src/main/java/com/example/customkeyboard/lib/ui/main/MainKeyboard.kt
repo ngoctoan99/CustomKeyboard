@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Message
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.view.accessibility.AccessibilityEvent
@@ -276,13 +277,25 @@ class MainKeyboard @JvmOverloads constructor(
         // doesn't get delivered to the old or new keyboard
         mAbortKey = true // Until the next ACTION_DOWN
     }
+    fun changeBackground(){
+        saveDataToSharedPreferences(context,"BackGroundKeyBoard",R.drawable.background)
+    }
 
     fun vibrateIfNeeded() {
         if (ItemMainKeyboard.VIBRATE_ON_KEYPRESS) {
             performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
         }
     }
-
+    fun saveDataToSharedPreferences(context: Context, key: String, value: Int) {
+        val sharedPreferences = context.getSharedPreferences("Keyboard", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putInt(key, value)
+        editor.apply()
+    }
+    fun retrieveDataFromSharedPreferences(context: Context, key: String): Int? {
+        val sharedPreferences = context.getSharedPreferences("Keyboard", Context.MODE_PRIVATE)
+        return sharedPreferences.getInt(key, 0)
+    }
     /**
      * Sets the state of the shift key of the keyboard, if any.
      * @param shifted whether or not to enable the state of the shift key

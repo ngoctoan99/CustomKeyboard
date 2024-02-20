@@ -1,59 +1,47 @@
-//package com.example.customkeyboard.lib.ui.emoji
-//
-//import android.content.Context
-//import android.graphics.Paint
-//import android.graphics.Typeface
-//import android.os.Build
-//import android.os.Handler
-//import android.os.Looper
-//import android.util.AttributeSet
-//import android.view.LayoutInflater
-//import android.view.ViewGroup
-//import androidx.annotation.RequiresApi
-//import androidx.emoji2.text.EmojiCompat
-//import com.example.customkeyboard.R
-//import com.example.customkeyboard.databinding.ItemKeyboardEmojiBinding
-//import com.example.customkeyboard.databinding.KeyboardEmojiBinding
-//import com.example.customkeyboard.lib.common.core.BaseKeyboard
-//import com.example.customkeyboard.lib.ui.main.OnKeyboardActionListener
-////import com.frogobox.recycler.core.FrogoRecyclerNotifyListener
-////import com.frogobox.recycler.core.IFrogoBindingAdapter
-////import com.frogobox.recycler.ext.injectorBinding
-//
-///**
-// * Created by Faisal Amir on 11/12/22
-// * -----------------------------------------
-// * E-mail   : faisalamircs@gmail.com
-// * Github   : github.com/amirisback
-// * -----------------------------------------
-// * Copyright (C) Frogobox ID / amirisback
-// * All rights reserved
-// */
-//
-//class EmojiKeyboard(
-//    context: Context,
-//    attrs: AttributeSet?,
-//) : BaseKeyboard<KeyboardEmojiBinding>(context, attrs) {
-//
-//    private var emojiCompatMetadataVersion = 0
-//
-//    var mOnKeyboardActionListener: OnKeyboardActionListener? = null
-//
-//    override fun setupViewBinding(): KeyboardEmojiBinding {
-//        return KeyboardEmojiBinding.inflate(LayoutInflater.from(context), this, true)
-//    }
-//
-//    override fun onCreate() {
-//    }
-//
-//    @RequiresApi(Build.VERSION_CODES.M)
-//    fun openEmojiPalette() {
-//        setupEmojis(EmojiCategoryType.GENERAL.path)
-//        setupEmojiCategory()
-//    }
-//
-//    @RequiresApi(Build.VERSION_CODES.M)
-//    private fun setupEmojiCategory() {
+package com.example.customkeyboard.lib.ui.emoji
+
+import android.content.Context
+import android.graphics.Paint
+import android.graphics.Typeface
+import android.os.Build
+import android.os.Handler
+import android.os.Looper
+import android.util.AttributeSet
+import android.view.LayoutInflater
+import androidx.annotation.RequiresApi
+import androidx.emoji2.text.EmojiCompat
+import androidx.recyclerview.widget.GridLayoutManager
+import com.example.customkeyboard.databinding.KeyboardEmojiBinding
+import com.example.customkeyboard.lib.common.core.BaseKeyboard
+import com.example.customkeyboard.lib.ui.emoji.adapter.EmojiKeyAdapter
+import com.example.customkeyboard.lib.ui.main.OnKeyboardActionListener
+
+
+
+class EmojiKeyboard(
+    context: Context,
+    attrs: AttributeSet?,
+) : BaseKeyboard<KeyboardEmojiBinding>(context, attrs) {
+
+    private var emojiCompatMetadataVersion = 0
+    private lateinit var emojiKeyAdapter : EmojiKeyAdapter
+    var mOnKeyboardActionListener: OnKeyboardActionListener? = null
+
+    override fun setupViewBinding(): KeyboardEmojiBinding {
+        return KeyboardEmojiBinding.inflate(LayoutInflater.from(context), this, true)
+    }
+
+    override fun onCreate() {
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun openEmojiPalette() {
+        setupEmojis(EmojiCategoryType.GENERAL.path)
+        setupEmojiCategory()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun setupEmojiCategory() {
 //        val adapterCallback =
 //            object : IFrogoBindingAdapter<EmojiCategory, ItemKeyboardEmojiBinding> {
 //
@@ -100,33 +88,44 @@
 //                .createLayoutLinearHorizontal(false)
 //                .build()
 //        }
-//    }
-//
-//    @RequiresApi(Build.VERSION_CODES.M)
-//    private fun setupEmojis(path: String) {
-//        ensureBackgroundThread {
-//            val fullEmojiList = parseRawEmojiSpecsFile(context, path)
-//            val systemFontPaint = Paint().apply {
-//                typeface = Typeface.DEFAULT
-//            }
-//
-//            val emojis = fullEmojiList.filter { emoji ->
-//                systemFontPaint.hasGlyph(emoji) || (EmojiCompat.get().loadState == EmojiCompat.LOAD_STATE_SUCCEEDED
-//                        && EmojiCompat.get().getEmojiMatch(
-//                    emoji,
-//                    emojiCompatMetadataVersion
-//                ) == EmojiCompat.EMOJI_SUPPORTED)
-//            }
-//
-//            Handler(Looper.getMainLooper()).post {
-//                setupEmojiAdapter(emojis)
-//            }
-//
-//        }
-//    }
-//
-//    private fun setupEmojiAdapter(emojis: List<String>) {
-//
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun setupEmojis(path: String) {
+        ensureBackgroundThread {
+            val fullEmojiList = parseRawEmojiSpecsFile(context, path)
+            val systemFontPaint = Paint().apply {
+                typeface = Typeface.DEFAULT
+            }
+
+            val emojis = fullEmojiList.filter { emoji ->
+                systemFontPaint.hasGlyph(emoji) || (EmojiCompat.get().loadState == EmojiCompat.LOAD_STATE_SUCCEEDED
+                        && EmojiCompat.get().getEmojiMatch(
+                    emoji,
+                    emojiCompatMetadataVersion
+                ) == EmojiCompat.EMOJI_SUPPORTED)
+            }
+
+            Handler(Looper.getMainLooper()).post {
+                setupEmojiAdapter(emojis)
+            }
+
+        }
+    }
+
+    private fun setupEmojiAdapter(emojis: List<String>) {
+        emojiKeyAdapter = EmojiKeyAdapter()
+        binding?.apply {
+            emojiList.apply {
+                adapter = emojiKeyAdapter
+                layoutManager = GridLayoutManager(context, 6)
+            }
+        }
+        emojiKeyAdapter!!.list = emojis
+        emojiKeyAdapter!!.notifyDataSetChanged()
+        emojiKeyAdapter.setItemClickListener {
+            mOnKeyboardActionListener!!.onText(it)
+        }
 //        val adapterCallback = object : IFrogoBindingAdapter<String, ItemKeyboardEmojiBinding> {
 //            override fun onItemClicked(
 //                binding: ItemKeyboardEmojiBinding,
@@ -172,16 +171,16 @@
 //
 //            emojiList.layoutManager = mLayoutManager
 //        }
-//    }
-//
-//    private fun ensureBackgroundThread(callback: () -> Unit) {
-//        if (Looper.myLooper() == Looper.getMainLooper()) {
-//            Thread {
-//                callback()
-//            }.start()
-//        } else {
-//            callback()
-//        }
-//    }
-//
-//}
+    }
+
+    private fun ensureBackgroundThread(callback: () -> Unit) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            Thread {
+                callback()
+            }.start()
+        } else {
+            callback()
+        }
+    }
+
+}

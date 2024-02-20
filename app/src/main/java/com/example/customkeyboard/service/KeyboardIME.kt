@@ -1,7 +1,10 @@
 package com.example.customkeyboard.service
 
+import android.content.Intent
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.EditText
 import androidx.annotation.RequiresApi
 import com.example.customkeyboard.R
@@ -22,7 +25,7 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
     override fun setupBinding() {
         initialSetupKeyboard()
         binding?.keyboardMain?.mOnKeyboardActionListener = this
-//        binding?.keyboardEmoji?.mOnKeyboardActionListener = this
+        binding?.keyboardEmoji?.mOnKeyboardActionListener = this
     }
 
     override fun invalidateKeyboard() {
@@ -37,7 +40,7 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
 //            keyboardMoview.setInputConnection(currentInputConnection)
 //            keyboardWebview.setInputConnection(currentInputConnection)
 //            keyboardForm.setInputConnection(currentInputConnection)
-//            keyboardEmoji.setInputConnection(currentInputConnection)
+            keyboardEmoji.setInputConnection(currentInputConnection)
 //            keyboardTemplateText.setInputConnection(currentInputConnection)
         }
     }
@@ -47,11 +50,13 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
 //            keyboardMain.gone()
 //            keyboardHeader.gone()
 //            mockMeasureHeightKeyboard.invisible()
+            keyboardMain.visibility = View.GONE
         }
     }
 
     override fun showMainKeyboard() {
         binding?.apply {
+            keyboardMain.visibility = View.VISIBLE
 //            keyboardMain.visible()
 //            mockMeasureHeightKeyboard.gone()
 //            if (KeyboardUtil().menuKeyboard().isEmpty()) {
@@ -66,6 +71,8 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
 //            keyboardForm.gone()
 //            keyboardEmoji.gone()
 //            keyboardEmoji.binding?.emojiList?.scrollToPosition(0)
+            keyboardEmoji.visibility = View.GONE
+            keyboardEmoji.binding?.emojiList?.scrollToPosition(0)
         }
     }
 
@@ -125,7 +132,11 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
 //                keyboardTemplateText.gone()
 //                showMainKeyboard()
 //            }
-
+            keyboardEmoji.binding?.toolbarBack?.setOnClickListener {
+                keyboardEmoji.visibility = View.GONE
+                keyboardEmoji.binding?.emojiList?.scrollToPosition(0)
+                showMainKeyboard()
+            }
         }
     }
 
@@ -293,6 +304,8 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
 //        binding?.keyboardEmoji?.visible()
         hideMainKeyboard()
 //        binding?.keyboardEmoji?.openEmojiPalette()
+        binding?.keyboardEmoji?.visibility = View.VISIBLE
+        binding?.keyboardEmoji?.openEmojiPalette()
     }
 
     override fun getKeyboardLayoutXML(): Int {
