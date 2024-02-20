@@ -1,0 +1,56 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/keyboard_holder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/keyboard_bg_root">
+
+    <LinearLayout
+        android:id="@+id/container_keyboard_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/keyboard_header"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/keyboard_bg_root"
+            android:minHeight="@dimen/frogo_dimen_64dp" />
+
+        <com.example.customkeyboard.lib.ui.main.MainKeyboard
+            android:id="@+id/keyboard_main"
+            style="@style/KwKeyboardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/theme_dark_background_color" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mock_measure_height_keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/container_keyboard_main">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mock_keyboard_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/keyboard_bg_root"
+            android:minHeight="@dimen/frogo_dimen_64dp" />
+
+        <com.example.customkeyboard.lib.ui.main.MainKeyboard
+            android:id="@+id/mock_measure_height_keyboard_main"
+            style="@style/KwKeyboardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/theme_dark_background_color" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

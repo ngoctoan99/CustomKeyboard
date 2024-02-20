@@ -1,0 +1,15 @@
+
+Akotlin:S108â")Either remove or fill this block of code.(ª³‘
+2kotlin:S6531Œ"Remove this useless cast.(­±î¿
+Akotlin:S1874Î"#Deprecated code should not be used.(Ö„†‡øÿÿÿÿ
+<kotlin:S1874š"#Deprecated code should not be used.(Ğí¡‰
+<kotlin:S1874¡"#Deprecated code should not be used.(Šˆ×¶
+Akotlin:S1874É"#Deprecated code should not be used.(úùëÑûÿÿÿÿ
+pkotlin:S3776ò"RRefactor this method to reduce its Cognitive Complexity from 45 to the 15 allowed.(˜ƒÍßüÿÿÿÿ
+jkotlin:S3776˜"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(«ÛÅ$
+pkotlin:S3776Ë"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(­×‡¬ûÿÿÿÿ
+pkotlin:S3776ê"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(ŒË‚‘ùÿÿÿÿ
+pkotlin:S3776Ó"RRefactor this method to reduce its Cognitive Complexity from 50 to the 15 allowed.(ë‡Îöşÿÿÿÿ
+kkotlin:S3776 "RRefactor this method to reduce its Cognitive Complexity from 73 to the 15 allowed.(è ×Ì
+Lkotlin:S1066¼".Merge this "if" statement with the nested one.(ğ¼„Ëÿÿÿÿÿ
+Gkotlin:S1066Š".Merge this "if" statement with the nested one.(Ë‰‹Œ
