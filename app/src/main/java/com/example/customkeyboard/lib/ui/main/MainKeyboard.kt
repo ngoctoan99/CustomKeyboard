@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.graphics.Paint.Align
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.os.Build
@@ -15,12 +16,22 @@ import android.util.TypedValue
 import android.view.*
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityManager
-import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.customkeyboard.R
+import com.example.customkeyboard.lib.common.ext.adjustAlpha
+import com.example.customkeyboard.lib.common.ext.applyColorFilter
+import com.example.customkeyboard.lib.common.ext.getContrastColor
+import com.example.customkeyboard.lib.common.ext.getProperBackgroundColor
+import com.example.customkeyboard.lib.common.ext.getProperPrimaryColor
+import com.example.customkeyboard.lib.common.ext.getProperTextColor
+import com.example.customkeyboard.lib.common.ext.getStrokeColor
+import com.example.customkeyboard.lib.common.ext.isDarkThemeOn
 import com.example.customkeyboard.lib.ui.main.ItemMainKeyboard.Companion.KEYCODE_DELETE
 import com.example.customkeyboard.lib.ui.main.ItemMainKeyboard.Companion.KEYCODE_EMOJI
 import com.example.customkeyboard.lib.ui.main.ItemMainKeyboard.Companion.KEYCODE_ENTER
@@ -31,20 +42,15 @@ import com.example.customkeyboard.lib.ui.main.ItemMainKeyboard.Companion.MAX_KEY
 import com.example.customkeyboard.lib.ui.main.ItemMainKeyboard.Companion.SHIFT_OFF
 import com.example.customkeyboard.lib.ui.main.ItemMainKeyboard.Companion.SHIFT_ON_ONE_CHAR
 import com.example.customkeyboard.lib.ui.main.ItemMainKeyboard.Companion.SHIFT_ON_PERMANENT
-import com.example.customkeyboard.lib.common.ext.adjustAlpha
-import com.example.customkeyboard.lib.common.ext.applyColorFilter
-import com.example.customkeyboard.lib.common.ext.getContrastColor
-import com.example.customkeyboard.lib.common.ext.getProperBackgroundColor
-import com.example.customkeyboard.lib.common.ext.getProperPrimaryColor
-import com.example.customkeyboard.lib.common.ext.getProperTextColor
-import com.example.customkeyboard.lib.common.ext.getStrokeColor
-import com.example.customkeyboard.lib.common.ext.isDarkThemeOn
+import java.io.ByteArrayOutputStream
 import java.util.*
 import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
 
+
 @SuppressLint("UseCompatLoadingForDrawables", "ClickableViewAccessibility")
+@RequiresApi(Build.VERSION_CODES.O)
 class MainKeyboard @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet?,
@@ -134,7 +140,10 @@ class MainKeyboard @JvmOverloads constructor(
     private val mAccessibilityManager: AccessibilityManager
 
     private var mHandler: Handler? = null
-    var imageChange : Int = retrieveDataFromSharedPreferences(context,"KB")?:0
+    var linkURL : String = getlinkURL(context,"URL")?:""
+
+
+    var imageBitmap : Bitmap? = getBitmap(context)?:null
 
     companion object {
         private const val NOT_A_KEY = -1
@@ -253,10 +262,33 @@ class MainKeyboard @JvmOverloads constructor(
 //                background.applyColorFilter(darkerColor)
 //                val drawable = ContextCompat.getDrawable(context, R.drawable.background1)
 //                background = drawable
-                if (imageChange != 0) {
-                    val drawable = ContextCompat.getDrawable(context, imageChange)
+//                val bitmap = BitmapFactory.decodeResource(resources, R.drawable.background1)
+//                val drawable = BitmapDrawable(resources,bitmap)
+//                background = drawable
+
+
+//                if (linkURL != "") {
+//                    Glide.with(this)
+//                        .asBitmap()
+//                        .load(linkURL)
+//                        .into(object : CustomTarget<Bitmap>(){
+//                            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+//                                val drawable = BitmapDrawable(resources,resource)
+//                                background = drawable
+//                            }
+//                            override fun onLoadCleared(placeholder: Drawable?) {
+//                                // this is called when imageView is cleared on lifecycle call or for
+//                                // some other reason.
+//                                // if you are referencing the bitmap somewhere else too other than this imageView
+//                                // clear it here as you can no longer have the bitmap
+//                            }
+//                        })
+//                }
+                if(imageBitmap != null){
+                    val drawable = BitmapDrawable(resources,imageBitmap)
                     background = drawable
-                } else {
+                }
+                else {
                     val drawable = ContextCompat.getDrawable(context, R.drawable.background1)
                     background = drawable
 
@@ -288,8 +320,33 @@ class MainKeyboard @JvmOverloads constructor(
         // doesn't get delivered to the old or new keyboard
         mAbortKey = true // Until the next ACTION_DOWN
     }
-    fun changeBackground(drawableId : Int){
-        saveDataToSharedPreferences(context,"KB",drawableId)
+    fun changeBackgroundOnline(linkURL : String){
+        setLinkURL(context,"URL",linkURL)
+    }
+    fun changeBackgroundBitmap(bitmap : Bitmap){
+        setBitmap(context,bitmap)
+    }
+    fun setBitmap(context : Context, bitmap : Bitmap){
+        val sharedPreferences = context.getSharedPreferences("MySharedPreferences", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+        val bitmapBytes = byteArrayOutputStream.toByteArray()
+        editor.putString("my_image", Base64.getEncoder().encodeToString(bitmapBytes))
+        editor.apply()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getBitmap(context : Context) : Bitmap?{
+        val sharedPreferences = context.getSharedPreferences("MySharedPreferences", Context.MODE_PRIVATE)
+        val bitmapString = sharedPreferences.getString("my_image", null)
+        if (bitmapString != null) {
+            val bitmapBytes = Base64.getDecoder().decode(bitmapString.toString())
+            val bitmap = BitmapFactory.decodeByteArray(bitmapBytes, 0, bitmapBytes.size)
+            return bitmap
+        }else {
+            return null
+        }
     }
 
     fun vibrateIfNeeded() {
@@ -297,15 +354,15 @@ class MainKeyboard @JvmOverloads constructor(
             performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
         }
     }
-    fun saveDataToSharedPreferences(context: Context, key: String, value: Int) {
+    fun setLinkURL(context: Context, key: String, value: String) {
         val sharedPreferences = context.getSharedPreferences("Keyboard", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        editor.putInt(key, value)
+        editor.putString(key, value)
         editor.apply()
     }
-    fun retrieveDataFromSharedPreferences(context: Context, key: String): Int? {
+    fun getlinkURL(context: Context, key: String): String? {
         val sharedPreferences = context.getSharedPreferences("Keyboard", Context.MODE_PRIVATE)
-        return sharedPreferences.getInt(key, 0)
+        return sharedPreferences.getString(key, "")
     }
 
 

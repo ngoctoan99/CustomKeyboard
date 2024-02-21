@@ -13,7 +13,7 @@ import androidx.emoji2.text.EmojiCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.customkeyboard.databinding.KeyboardEmojiBinding
 import com.example.customkeyboard.lib.common.core.BaseKeyboard
-import com.example.customkeyboard.lib.ui.emoji.adapter.EmojiKeyAdapter
+import com.example.customkeyboard.lib.adapter.EmojiKeyAdapter
 import com.example.customkeyboard.lib.ui.main.OnKeyboardActionListener
 
 

@@ -14,7 +14,6 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/keyboard_header"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/keyboard_bg_root"
@@ -52,10 +51,12 @@
             android:background="@color/theme_dark_background_color" />
 
     </LinearLayout>
+
+
     <com.example.customkeyboard.lib.ui.emoji.EmojiKeyboard
         android:id="@+id/keyboard_emoji"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone"

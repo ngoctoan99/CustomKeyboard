@@ -1,4 +1,4 @@
-package com.example.customkeyboard.lib.ui.emoji.adapter
+package com.example.customkeyboard.lib.adapter
 
 import android.util.Log
 import android.view.LayoutInflater

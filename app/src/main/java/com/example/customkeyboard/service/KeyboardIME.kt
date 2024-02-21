@@ -2,20 +2,24 @@ package com.example.customkeyboard.service
 
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.customkeyboard.R
 import com.example.customkeyboard.databinding.KeyboardImeBinding
+import com.example.customkeyboard.lib.adapter.FeatureAdapter
 import com.example.customkeyboard.lib.common.core.BaseKeyboardIME
+import com.example.customkeyboard.lib.model.KeyboardFeature
 
+@RequiresApi(Build.VERSION_CODES.O)
 class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
-
+    private lateinit var featureAdapter: FeatureAdapter
     override fun setupViewBinding(): KeyboardImeBinding {
         return KeyboardImeBinding.inflate(LayoutInflater.from(this), null, false)
     }
+
 
     override fun initialSetupKeyboard() {
         binding?.keyboardMain?.setKeyboard(keyboard!!)
@@ -51,12 +55,15 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
 //            keyboardHeader.gone()
 //            mockMeasureHeightKeyboard.invisible()
             keyboardMain.visibility = View.GONE
+            mockMeasureHeightKeyboard.visibility = View.INVISIBLE
+            keyboardHeader.visibility = View.GONE
         }
     }
 
     override fun showMainKeyboard() {
         binding?.apply {
             keyboardMain.visibility = View.VISIBLE
+            keyboardHeader.visibility = View.VISIBLE
 //            keyboardMain.visible()
 //            mockMeasureHeightKeyboard.gone()
 //            if (KeyboardUtil().menuKeyboard().isEmpty()) {
@@ -73,15 +80,18 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
 //            keyboardEmoji.binding?.emojiList?.scrollToPosition(0)
             keyboardEmoji.visibility = View.GONE
             keyboardEmoji.binding?.emojiList?.scrollToPosition(0)
+            mockMeasureHeightKeyboard.visibility = View.GONE
         }
     }
 
     override fun showOnlyKeyboard() {
 //        binding?.keyboardMain?.visible()
+        binding?.keyboardMain?.visibility = View.VISIBLE
     }
 
     override fun hideOnlyKeyboard() {
 //        binding?.keyboardMain?.gone()
+        binding?.keyboardMain?.visibility = View.GONE
     }
 
     override fun EditText.showKeyboardExt() {
@@ -139,6 +149,50 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
             }
         }
     }
+
+    override fun setupFeatureKeyboard() {
+        binding?.apply {
+            keyboardHeader.visibility = View.VISIBLE
+            mockKeyboardHeader.visibility = View.VISIBLE
+            featureAdapter = FeatureAdapter()
+            keyboardHeader.apply {
+                adapter = featureAdapter
+                layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+            }
+            featureAdapter.list  = menuToggle()
+            featureAdapter.notifyDataSetChanged()
+            featureAdapter.setItemClickListener {
+                if(it.type == "PoolKeyboard"){
+                    val launchIntent: Intent? =
+                        binding!!.root.context.packageManager.getLaunchIntentForPackage("com.example.customkeyboard")
+                    launchIntent!!.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    binding!!.root.context.startActivity(launchIntent)
+                }
+
+            }
+        }
+
+    }
+    fun menuToggle(): List<KeyboardFeature> {
+        return listOf(
+            KeyboardFeature(
+                type = "PoolKeyboard",
+                icon = R.drawable.ic_menu_movie
+            ),
+            KeyboardFeature(
+                type = "Movie",
+                icon = R.drawable.ic_menu_news
+            ),
+            KeyboardFeature(
+                type = "Movie",
+                icon = R.drawable.ic_menu_ps_app
+            ),
+            KeyboardFeature(
+                type = "Movie",
+                icon = R.drawable.ic_menu_ps_game
+            ))
+    }
+
 
 //    override fun setupFeatureKeyboard() {
 //        val maxMenu = 4
