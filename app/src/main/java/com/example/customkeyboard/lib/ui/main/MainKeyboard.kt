@@ -15,6 +15,7 @@ import android.util.TypedValue
 import android.view.*
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
@@ -133,6 +134,7 @@ class MainKeyboard @JvmOverloads constructor(
     private val mAccessibilityManager: AccessibilityManager
 
     private var mHandler: Handler? = null
+    var imageChange : Int = retrieveDataFromSharedPreferences(context,"KB")?:0
 
     companion object {
         private const val NOT_A_KEY = -1
@@ -246,10 +248,19 @@ class MainKeyboard @JvmOverloads constructor(
                 previewBackground.findDrawableByLayerId(R.id.button_background_stroke)
                     .applyColorFilter(strokeColor)
                 background = previewBackground
-            } else {
-                background.applyColorFilter(darkerColor)
-                val drawable = ContextCompat.getDrawable(context, R.drawable.background1)
-                background = drawable
+            }
+            else {
+//                background.applyColorFilter(darkerColor)
+//                val drawable = ContextCompat.getDrawable(context, R.drawable.background1)
+//                background = drawable
+                if (imageChange != 0) {
+                    val drawable = ContextCompat.getDrawable(context, imageChange)
+                    background = drawable
+                } else {
+                    val drawable = ContextCompat.getDrawable(context, R.drawable.background1)
+                    background = drawable
+
+                }
             }
 
         }
@@ -277,8 +288,8 @@ class MainKeyboard @JvmOverloads constructor(
         // doesn't get delivered to the old or new keyboard
         mAbortKey = true // Until the next ACTION_DOWN
     }
-    fun changeBackground(){
-        saveDataToSharedPreferences(context,"BackGroundKeyBoard",R.drawable.background)
+    fun changeBackground(drawableId : Int){
+        saveDataToSharedPreferences(context,"KB",drawableId)
     }
 
     fun vibrateIfNeeded() {
@@ -296,6 +307,8 @@ class MainKeyboard @JvmOverloads constructor(
         val sharedPreferences = context.getSharedPreferences("Keyboard", Context.MODE_PRIVATE)
         return sharedPreferences.getInt(key, 0)
     }
+
+
     /**
      * Sets the state of the shift key of the keyboard, if any.
      * @param shifted whether or not to enable the state of the shift key
