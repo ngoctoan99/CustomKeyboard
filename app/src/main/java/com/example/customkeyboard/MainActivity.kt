@@ -1,14 +1,14 @@
 package com.example.customkeyboard
 
-import android.content.ComponentName
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresApi
@@ -18,16 +18,31 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.customkeyboard.databinding.ActivityMainBinding
 import com.example.customkeyboard.databinding.KeyboardImeBinding
-import com.example.customkeyboard.service.KeyboardIME
+import com.example.customkeyboard.lib.util.loadData
 @RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : AppCompatActivity() {
     private lateinit var  binding : ActivityMainBinding
     private lateinit var bindings : KeyboardImeBinding
+
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val data = intent?.getStringExtra("data")
+            val numberText = "Number Text Click : ${data}"
+            binding.tvNumberTextClick.text = numberText
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         bindings = KeyboardImeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        showSoftKeyboard(this,binding.root)
+        registerReceiver(receiver, IntentFilter("com.example.customkeyboard.CUSTOM_BROADCAST"))
+
+        // first display
+        val numberText = "Number Text Click : ${loadData(this)}"
+        binding.tvNumberTextClick.text = numberText
+
 
         binding.btnChange1.setOnClickListener {
             changeKeyboardURL("https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg")

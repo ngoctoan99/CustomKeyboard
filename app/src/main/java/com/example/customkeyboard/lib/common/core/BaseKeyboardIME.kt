@@ -1,6 +1,9 @@
 package com.example.customkeyboard.lib.common.core
 
+import android.content.Intent
 import android.inputmethodservice.InputMethodService
+import android.media.AudioManager
+import android.os.Build
 import android.text.InputType
 import android.text.InputType.TYPE_CLASS_DATETIME
 import android.text.InputType.TYPE_CLASS_NUMBER
@@ -17,6 +20,7 @@ import android.view.inputmethod.EditorInfo.IME_MASK_ACTION
 import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import android.widget.EditText
+import androidx.annotation.RequiresApi
 import androidx.viewbinding.ViewBinding
 import com.example.customkeyboard.R
 import com.example.customkeyboard.lib.ui.main.ItemMainKeyboard
@@ -24,7 +28,10 @@ import com.example.customkeyboard.lib.ui.main.ItemMainKeyboard.Companion.SHIFT_O
 import com.example.customkeyboard.lib.ui.main.ItemMainKeyboard.Companion.SHIFT_ON_ONE_CHAR
 import com.example.customkeyboard.lib.ui.main.ItemMainKeyboard.Companion.SHIFT_ON_PERMANENT
 import com.example.customkeyboard.lib.ui.main.OnKeyboardActionListener
+import com.example.customkeyboard.lib.util.loadData
+import com.example.customkeyboard.lib.util.saveData
 
+@RequiresApi(Build.VERSION_CODES.O)
 abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeyboardActionListener,
     IKeyboardIME {
 
@@ -43,7 +50,7 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
     var inputTypeClass = InputType.TYPE_CLASS_TEXT
     var enterKeyType = IME_ACTION_NONE
     var switchToLetters = false
-
+    var numberText = 0
     var binding: VB? = null
 
     abstract fun setupViewBinding() : VB
@@ -328,11 +335,15 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
                 runEmojiBoard()
             }
             else -> {
+                /// click key text
                 var codeChar = code.toChar()
                 if (Character.isLetter(codeChar) && keyboard!!.mShiftState > SHIFT_OFF) {
                     codeChar = Character.toUpperCase(codeChar)
                 }
-
+                val am = getSystemService(AUDIO_SERVICE) as AudioManager
+                val vol = 0.5.toFloat() //This will be half of the default system sound
+                am.playSoundEffect(AudioManager.FX_KEY_CLICK, vol)
+                updateNumberText()
                 // If the keyboard is set to symbols and the user presses space, we usually should switch back to the letters keyboard.
                 // However, avoid doing that in cases when the EditText for example requires numbers as the input.
                 // We can detect that by the text not changing on pressing Space.
@@ -356,6 +367,16 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
         if (code != ItemMainKeyboard.KEYCODE_SHIFT) {
             updateShiftKeyState()
         }
+    }
+
+    private fun updateNumberText(){
+        val numberOld = loadData(binding!!.root.context)
+        val currentNumberText = numberOld + 1
+        saveData(binding!!.root.context,currentNumberText)
+        val intent = Intent()
+        intent.action = "com.example.customkeyboard.CUSTOM_BROADCAST"
+        intent.putExtra("data", loadData(binding!!.root.context).toString())
+        sendBroadcast(intent)
     }
 
     override fun moveCursor(moveRight: Boolean) {

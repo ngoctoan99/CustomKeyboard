@@ -15,7 +15,7 @@ fun Context.isDarkThemeOn(): Boolean {
 }
 
 fun Context.getProperTextColor() = if (isDarkThemeOn()) {
-    ContextCompat.getColor(this, R.color.system_accent1_10)
+    ContextCompat.getColor(this, R.color.system_accent1_900)
 } else {
     ContextCompat.getColor(this, R.color.system_accent1_900)
 }

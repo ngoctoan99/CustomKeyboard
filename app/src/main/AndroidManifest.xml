@@ -34,6 +34,14 @@
                 <action android:name="android.view.InputMethod" />
             </intent-filter>
         </service>
+
+        <receiver
+            android:name=".MainActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="ccom.example.customkeyboard.CUSTOM_BROADCAST" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
