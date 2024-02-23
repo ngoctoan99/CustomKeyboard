@@ -213,14 +213,6 @@ class MainKeyboard @JvmOverloads constructor(
         mTopSmallNumberSize = resources.getDimension(R.dimen.frogo_dimen_font_10sp)
         mTopSmallNumberMarginWidth = resources.getDimension(R.dimen.top_small_number_margin_width)
         mTopSmallNumberMarginHeight = resources.getDimension(R.dimen.top_small_number_margin_height)
-        val receiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                val data = intent?.getStringExtra("dataVoice")
-                Log.d("TTT mOnKeyboardActionListener","${data.toString()}")
-                mMiniKeyboard!!.mOnKeyboardActionListener!!.onText(data?:"")
-            }
-        }
-        context.registerReceiver(receiver, IntentFilter("com.example.customkeyboard.CUSTOM_BROADCAST1"))
     }
 
     @SuppressLint("HandlerLeak")

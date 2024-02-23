@@ -12,6 +12,8 @@ import android.speech.SpeechRecognizer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethodInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -60,6 +62,7 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
 //            keyboardWebview.setInputConnection(currentInputConnection)
 //            keyboardForm.setInputConnection(currentInputConnection)
             keyboardEmoji.setInputConnection(currentInputConnection)
+            keyboardTheme.setInputConnection(currentInputConnection)
 //            keyboardTemplateText.setInputConnection(currentInputConnection)
         }
     }
@@ -96,6 +99,8 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
             keyboardEmoji.visibility = View.GONE
             keyboardEmoji.binding?.emojiList?.scrollToPosition(0)
             mockMeasureHeightKeyboard.visibility = View.GONE
+            keyboardTheme.visibility = View.GONE
+
         }
     }
 
@@ -162,6 +167,10 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
                 keyboardEmoji.binding?.emojiList?.scrollToPosition(0)
                 showMainKeyboard()
             }
+            keyboardTheme.binding?.toolbarBack?.setOnClickListener {
+                keyboardTheme.visibility = View.GONE
+                showMainKeyboard()
+            }
         }
     }
 
@@ -177,7 +186,7 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
             featureAdapter.list  = menuToggle()
             featureAdapter.notifyDataSetChanged()
             featureAdapter.setItemClickListener {
-                if(it.type == "PoolKeyboard"){
+                if(it.type == "AppKeyboard"){
                     val launchIntent: Intent? =
                         binding!!.root.context.packageManager.getLaunchIntentForPackage("com.example.customkeyboard")
                     launchIntent!!.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -188,11 +197,30 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
                         Toast.makeText(baseContext,"Speech recognition is not available",Toast.LENGTH_SHORT).show()
                     }
                     else {
-                        val intent = Intent(baseContext, TranparentActivity::class.java)
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                        intent.putExtra("Click","GGVoice")
-                        startActivity(intent)
+//                        val intent = Intent(baseContext, TranparentActivity::class.java)
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+//                        intent.putExtra("Click","GGVoice")
+//                        startActivity(intent)
+                        val imeManager = applicationContext.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                        val list: List<InputMethodInfo> = imeManager.enabledInputMethodList
+                        for (el in list) {
+                            for (i in 0 until el.subtypeCount) {
+                                if (el.getSubtypeAt(i).mode != "voice") continue
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                                    switchInputMethod(el.id)
+                                } else {
+                                    window.window?.let { window ->
+                                        @Suppress("DEPRECATION")
+                                        imeManager.setInputMethod(window.attributes.token, el.id)
+                                    }
+                                }
+                            }
+                        }
                     }
+                }
+                else if(it.type == "Theme"){
+                    hideMainKeyboard()
+                    binding?.keyboardTheme?.visibility = View.VISIBLE
                 }
 
             }
@@ -206,16 +234,16 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
                 icon = R.drawable.ic_menu_voice
             ),
             KeyboardFeature(
-                type = "PoolKeyboard",
-                icon = R.drawable.ic_menu_news
+                type = "AppKeyboard",
+                icon = R.drawable.ic_menu_pool_keyboard
             ),
             KeyboardFeature(
-                type = "Movie",
-                icon = R.drawable.ic_menu_ps_app
+                type = "Theme",
+                icon = R.drawable.ic_menu_theme
             ),
             KeyboardFeature(
-                type = "Movie",
-                icon = R.drawable.ic_menu_ps_game
+                type = "Language",
+                icon = R.drawable.ic_menu_language
             ))
     }
 
@@ -386,6 +414,10 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
 //        binding?.keyboardEmoji?.openEmojiPalette()
         binding?.keyboardEmoji?.visibility = View.VISIBLE
         binding?.keyboardEmoji?.openEmojiPalette()
+    }
+
+    override fun onText(text: String) {
+        super.onText(text)
     }
 
     override fun getKeyboardLayoutXML(): Int {

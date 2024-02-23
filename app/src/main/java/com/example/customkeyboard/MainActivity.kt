@@ -7,8 +7,14 @@ import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
+import android.inputmethodservice.InputMethodService
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
+import android.view.inputmethod.InputMethod
+import android.view.inputmethod.InputMethodInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -21,6 +27,7 @@ import com.example.customkeyboard.lib.util.loadNumberTextData
 import com.example.customkeyboard.lib.util.restartSoftKeyboard
 import com.example.customkeyboard.lib.util.saveLanguageKeyBoardData
 import com.example.customkeyboard.lib.util.showSoftKeyboard
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : AppCompatActivity() {
@@ -45,7 +52,6 @@ class MainActivity : AppCompatActivity() {
         // first display
         val numberText = "Number Text Click : ${loadNumberTextData(this)}"
         binding.tvNumberTextClick.text = numberText
-
 
         binding.btnTheme1.setOnClickListener {
             changeKeyboardURL("https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg")
@@ -76,6 +82,15 @@ class MainActivity : AppCompatActivity() {
             saveLanguageKeyBoardData(this,R.xml.keys_letters_korean)
 //            refreshUIKeyboard()
             restartSoftKeyboard(this,binding.edtText)
+        }
+        binding.btnSettingInput.setOnClickListener{
+            Intent(Settings.ACTION_INPUT_METHOD_SETTINGS).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(this)
+            }
+        }
+        binding.btnKeyboard.setOnClickListener {
+            (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).showInputMethodPicker()
         }
     }
 
