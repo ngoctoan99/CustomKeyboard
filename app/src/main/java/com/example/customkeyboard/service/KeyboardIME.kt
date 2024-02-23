@@ -1,21 +1,36 @@
 package com.example.customkeyboard.service
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
+import android.os.Bundle
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.customkeyboard.R
+import com.example.customkeyboard.TranparentActivity
 import com.example.customkeyboard.databinding.KeyboardImeBinding
 import com.example.customkeyboard.lib.adapter.FeatureAdapter
 import com.example.customkeyboard.lib.common.core.BaseKeyboardIME
 import com.example.customkeyboard.lib.model.KeyboardFeature
+import com.example.customkeyboard.lib.util.loadLanguageKeyBoardData
+import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
     private lateinit var featureAdapter: FeatureAdapter
+    private val RQ_SPEECH_REC = 102
     override fun setupViewBinding(): KeyboardImeBinding {
         return KeyboardImeBinding.inflate(LayoutInflater.from(this), null, false)
     }
@@ -168,6 +183,17 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
                     launchIntent!!.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     binding!!.root.context.startActivity(launchIntent)
                 }
+                else if(it.type == "Voice"){
+                    if(!SpeechRecognizer.isRecognitionAvailable(baseContext)){
+                        Toast.makeText(baseContext,"Speech recognition is not available",Toast.LENGTH_SHORT).show()
+                    }
+                    else {
+                        val intent = Intent(baseContext, TranparentActivity::class.java)
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        intent.putExtra("Click","GGVoice")
+                        startActivity(intent)
+                    }
+                }
 
             }
         }
@@ -176,11 +202,11 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
     fun menuToggle(): List<KeyboardFeature> {
         return listOf(
             KeyboardFeature(
-                type = "PoolKeyboard",
-                icon = R.drawable.ic_menu_movie
+                type = "Voice",
+                icon = R.drawable.ic_menu_voice
             ),
             KeyboardFeature(
-                type = "Movie",
+                type = "PoolKeyboard",
                 icon = R.drawable.ic_menu_news
             ),
             KeyboardFeature(
@@ -363,7 +389,7 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
     }
 
     override fun getKeyboardLayoutXML(): Int {
-        return R.xml.keys_letters_qwerty
+        return loadLanguageKeyBoardData(baseContext)
     }
 
 }

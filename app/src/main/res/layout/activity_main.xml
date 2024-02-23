@@ -23,30 +23,55 @@
         android:layout_height="wrap_content"
         android:id="@+id/ivTest"/>
     <Button
-        android:id="@+id/btnChange1"
+        android:id="@+id/btnTheme1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnChange2"
+        app:layout_constraintEnd_toStartOf="@+id/btnTheme2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="Change1"/>
+        android:text="Theme1"/>
     <Button
-        android:id="@+id/btnChange2"
+        android:id="@+id/btnTheme2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnChange3"
-        app:layout_constraintStart_toEndOf="@+id/btnChange1"
-        android:text="Change2"/>
+        app:layout_constraintEnd_toStartOf="@+id/btnTheme3"
+        app:layout_constraintStart_toEndOf="@+id/btnTheme1"
+        android:text="Theme2"/>
     <Button
-        android:id="@+id/btnChange3"
+        android:id="@+id/btnTheme3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnChange2"
-        android:text="Change3"/>
+        app:layout_constraintStart_toEndOf="@+id/btnTheme2"
+        android:text="Theme3"/>
+
+    <Button
+        android:id="@+id/btnLanguage1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/btnTheme1"
+        app:layout_constraintEnd_toStartOf="@+id/btnLanguage2"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Language1"/>
+    <Button
+        android:id="@+id/btnLanguage2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/btnTheme2"
+        app:layout_constraintEnd_toStartOf="@+id/btnLanguage3"
+        app:layout_constraintStart_toEndOf="@+id/btnLanguage1"
+        android:text="Language2"/>
+    <Button
+        android:id="@+id/btnLanguage3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/btnTheme3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnLanguage2"
+        android:text="Language3"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

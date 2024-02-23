@@ -1,7 +1,10 @@
 package com.example.customkeyboard.lib.ui.main
 
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.*
 import android.graphics.Paint.Align
 import android.graphics.drawable.BitmapDrawable
@@ -156,6 +159,7 @@ class MainKeyboard @JvmOverloads constructor(
         private const val REPEAT_INTERVAL = 50 // ~20 keys per second
         private const val REPEAT_START_DELAY = 400
         private val LONGPRESS_TIMEOUT = ViewConfiguration.getLongPressTimeout()
+
     }
 
     // handle system default theme (Material You) specially as the color is taken from the system, not hardcoded by us
@@ -209,6 +213,14 @@ class MainKeyboard @JvmOverloads constructor(
         mTopSmallNumberSize = resources.getDimension(R.dimen.frogo_dimen_font_10sp)
         mTopSmallNumberMarginWidth = resources.getDimension(R.dimen.top_small_number_margin_width)
         mTopSmallNumberMarginHeight = resources.getDimension(R.dimen.top_small_number_margin_height)
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                val data = intent?.getStringExtra("dataVoice")
+                Log.d("TTT mOnKeyboardActionListener","${data.toString()}")
+                mMiniKeyboard!!.mOnKeyboardActionListener!!.onText(data?:"")
+            }
+        }
+        context.registerReceiver(receiver, IntentFilter("com.example.customkeyboard.CUSTOM_BROADCAST1"))
     }
 
     @SuppressLint("HandlerLeak")
@@ -1198,6 +1210,7 @@ class MainKeyboard @JvmOverloads constructor(
                 invalidateKey(mCurrentKey)
             }
         }
+
 
         mLastX = touchX
         mLastY = touchY

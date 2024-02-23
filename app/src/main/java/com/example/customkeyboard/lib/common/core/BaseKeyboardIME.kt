@@ -28,8 +28,9 @@ import com.example.customkeyboard.lib.ui.main.ItemMainKeyboard.Companion.SHIFT_O
 import com.example.customkeyboard.lib.ui.main.ItemMainKeyboard.Companion.SHIFT_ON_ONE_CHAR
 import com.example.customkeyboard.lib.ui.main.ItemMainKeyboard.Companion.SHIFT_ON_PERMANENT
 import com.example.customkeyboard.lib.ui.main.OnKeyboardActionListener
-import com.example.customkeyboard.lib.util.loadData
-import com.example.customkeyboard.lib.util.saveData
+import com.example.customkeyboard.lib.util.loadNumberTextData
+import com.example.customkeyboard.lib.util.saveNumberTextData
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeyboardActionListener,
@@ -93,6 +94,7 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
         super.onStartInputView(info, restarting)
         Log.d("TTT","onStartInputView")
         setInputView(onCreateInputView())
+        onStartInput(info, restarting)
     }
     override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {
         super.onStartInput(attribute, restarting)
@@ -370,12 +372,12 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
     }
 
     private fun updateNumberText(){
-        val numberOld = loadData(binding!!.root.context)
+        val numberOld = loadNumberTextData(binding!!.root.context)
         val currentNumberText = numberOld + 1
-        saveData(binding!!.root.context,currentNumberText)
+        saveNumberTextData(binding!!.root.context,currentNumberText)
         val intent = Intent()
         intent.action = "com.example.customkeyboard.CUSTOM_BROADCAST"
-        intent.putExtra("data", loadData(binding!!.root.context).toString())
+        intent.putExtra("data", loadNumberTextData(binding!!.root.context).toString())
         sendBroadcast(intent)
     }
 

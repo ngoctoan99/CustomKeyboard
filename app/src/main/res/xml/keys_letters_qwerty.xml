@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Keyboard xmlns:app="http://schemas.android.com/apk/res-auto">
+<Keyboard
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <Row>
         <Key
             app:keyEdgeFlags="left"

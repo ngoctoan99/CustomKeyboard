@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Keyboard
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Row>
+        <Key
+            app:keyWidth="10%p"
+            app:keyEdgeFlags="left"
+            app:keyLabel="ㅂ"/>
+        <Key
+            app:keyWidth="10%p"
+            app:keyLabel="ㅈ" />
+        <Key
+            app:keyWidth="10%p"
+            app:keyLabel="ㄷ" />
+        <Key
+            app:keyWidth="10%p"
+            app:keyLabel="ㄱ" />
+        <Key
+            app:keyWidth="10%p"
+            app:keyLabel="ㅅ" />
+        <Key
+            app:keyWidth="10%p"
+            app:keyLabel="ㅛ" />
+        <Key
+            app:keyWidth="10%p"
+            app:keyLabel="ㅕ" />
+        <Key
+            app:keyWidth="10%p"
+            app:keyLabel="ㅑ" />
+        <Key
+            app:keyWidth="10%p"
+            app:keyLabel="ㅐ" />
+        <Key
+            app:keyWidth="10%p"
+            app:keyEdgeFlags="right"
+            app:keyLabel="ㅔ" />
+    </Row>
+
+    <Row>
+        <Key
+            app:keyWidth="11%p"
+            app:keyEdgeFlags="left"
+            app:keyLabel="ㅁ" />
+        <Key
+            app:keyWidth="11%p"
+            app:keyLabel="ㄴ" />
+        <Key
+            app:keyWidth="11%p"
+            app:keyLabel="ㅇ" />
+        <Key
+            app:keyWidth="11%p"
+            app:keyLabel="ㄹ" />
+        <Key
+            app:keyWidth="11%p"
+            app:keyLabel="ㅎ" />
+        <Key
+            app:keyWidth="11%p"
+            app:keyLabel="ㅗ" />
+        <Key
+            app:keyLabel="ㅓ"
+            app:keyWidth="11%p" />
+        <Key
+            app:keyWidth="11%p"
+            app:keyLabel="ㅏ" />
+        <Key
+            app:keyWidth="11%p"
+            app:keyEdgeFlags="right"
+            app:keyLabel="ㅣ" />
+    </Row>
+
+    <Row>
+        <Key
+            app:code="-1"
+            app:keyEdgeFlags="left"
+            app:keyIcon="@drawable/ic_keyboard_caps_outline"
+            app:keyWidth="11%p" />
+        <Key
+            app:horizontalGap="1%"
+            app:keyWidth="11%p"
+            app:keyLabel="ㅋ" />
+        <Key
+            app:keyWidth="11%p"
+            app:keyLabel="ㅌ" />
+        <Key
+            app:keyWidth="11%p"
+            app:keyLabel="ㅊ" />
+        <Key
+            app:keyWidth="11%p"
+            app:keyLabel="ㅍ" />
+        <Key
+            app:keyWidth="11%p"
+            app:keyLabel="ㅠ" />
+        <Key
+            app:keyWidth="11%p"
+            app:keyLabel="ㅜ" />
+        <Key
+            app:keyWidth="11%p"
+            app:keyLabel="ㅡ" />
+        <Key
+            app:code="-5"
+            app:isRepeatable="true"
+            app:keyEdgeFlags="right"
+            app:keyIcon="@drawable/ic_keyboard_backspace"
+            app:keyWidth="11%p" />
+    </Row>
+
+    <Row>
+        <Key
+            app:code="-2"
+            app:keyEdgeFlags="left"
+            app:keyLabel="\?123"
+            app:keyWidth="15%p" />
+        <Key
+            app:keyLabel=","
+            app:keyWidth="10%p" />
+        <Key
+            app:code="-6"
+            app:keyEdgeFlags="left"
+            app:keyIcon="@drawable/ic_keyboard_emoji_emotions"
+            app:keyWidth="10%p" />
+        <Key
+            app:code="32"
+            app:isRepeatable="true"
+            app:keyWidth="40%p" />
+        <Key
+            app:keyLabel="."
+            app:keyWidth="10%p" />
+        <Key
+            app:code="-4"
+            app:keyEdgeFlags="right"
+            app:keyIcon="@drawable/ic_keyboard_enter"
+            app:keyWidth="15%p" />
+    </Row>
+</Keyboard>
