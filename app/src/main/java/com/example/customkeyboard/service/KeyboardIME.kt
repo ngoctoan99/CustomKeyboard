@@ -63,9 +63,10 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
 //            keyboardMoview.setInputConnection(currentInputConnection)
 //            keyboardWebview.setInputConnection(currentInputConnection)
 //            keyboardForm.setInputConnection(currentInputConnection)
-            keyboardEmoji.setInputConnection(currentInputConnection)
-            keyboardTheme.setInputConnection(currentInputConnection)
-            keyboardClipboard.setInputConnection(currentInputConnection)
+            val currentInputConnectionNotNull = currentInputConnection ?: return
+            keyboardEmoji.setInputConnection(currentInputConnectionNotNull)
+            keyboardTheme.setInputConnection(currentInputConnectionNotNull)
+            keyboardClipboard.setInputConnection(currentInputConnectionNotNull)
 //            keyboardTemplateText.setInputConnection(currentInputConnection)
         }
     }
@@ -234,6 +235,7 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
                 else if (it.type == "Clipboard"){
                     hideMainKeyboard()
                     binding?.keyboardClipboard?.visibility = View.VISIBLE
+                    binding?.keyboardClipboard?.setupClipboardAdapter(binding?.keyboardClipboard?.getDataClipboard()!!)
                 }
             }
         }
