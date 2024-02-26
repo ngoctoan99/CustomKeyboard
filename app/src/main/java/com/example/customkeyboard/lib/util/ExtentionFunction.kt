@@ -10,6 +10,8 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresApi
 import com.example.customkeyboard.R
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.io.ByteArrayOutputStream
 import java.util.Base64
 
@@ -92,4 +94,19 @@ fun getBitmap(context : Context) : Bitmap?{
     }else {
         return null
     }
+}
+
+fun saveDataClipboardLocal(context : Context , dataSave : ArrayList<String>){
+    val gson = Gson()
+    val jsonString = gson.toJson(dataSave)
+    val sharedPreferences = context.getSharedPreferences("MyPrefs", MODE_PRIVATE)
+    sharedPreferences.edit().putString("DataList", jsonString).apply()
+}
+fun getDataClipboardLocal(context : Context) : ArrayList<String>{
+    val gson = Gson()
+    val sharedPreferences = context.getSharedPreferences("MyPrefs", MODE_PRIVATE)
+    val json = sharedPreferences.getString("DataList", "[]")
+    val type = object : TypeToken<ArrayList<String>>() {}.type
+    val dataClipboard: ArrayList<String> = gson.fromJson(json, type)
+    return dataClipboard
 }

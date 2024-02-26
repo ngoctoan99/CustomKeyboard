@@ -13,6 +13,8 @@ import com.example.customkeyboard.databinding.KeyboardClipboardBinding
 import com.example.customkeyboard.lib.adapter.ClipboardAdapter
 import com.example.customkeyboard.lib.common.core.BaseKeyboard
 import com.example.customkeyboard.lib.ui.main.OnKeyboardActionListener
+import com.example.customkeyboard.lib.util.getDataClipboardLocal
+import com.example.customkeyboard.lib.util.saveDataClipboardLocal
 import java.util.ArrayList
 
 class ClipBoardKeyboard(
@@ -29,18 +31,22 @@ class ClipBoardKeyboard(
 
     override fun onCreate() {
     }
+
     fun getDataClipboard():List<String>{
-        val list :ArrayList<String> = ArrayList()
-        val clipboard = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-        var clipData = clipboard.primaryClip
-        clipboard.addPrimaryClipChangedListener {
-             clipData = clipboard.primaryClip
+        var list :ArrayList<String> = ArrayList()
+        if(getDataClipboardLocal(context).size > 0){
+            list = getDataClipboardLocal(context)
         }
-        if (clipData != null && clipData!!.itemCount > 0) {
-            for(i in 0 until clipData!!.itemCount){
-                val item = clipData!!.getItemAt(i)
-                list.add(item.text.toString())
-                Log.d("TTT getDataClipboard",item.text.toString())
+        val clipboard = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        clipboard.addPrimaryClipChangedListener {
+            val clipData = clipboard.primaryClip
+            if (clipData != null && clipData.itemCount > 0) {
+                for(i in 0 until clipData.itemCount){
+                    val item = clipData.getItemAt(i)
+                    list.add(item.text.toString())
+                    saveDataClipboardLocal(context,list)
+                    Log.d("TTT c","${item.text.toString()} ${clipData.itemCount}")
+                }
             }
         }
         return list
