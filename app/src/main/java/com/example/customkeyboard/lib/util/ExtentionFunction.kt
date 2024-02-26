@@ -59,18 +59,9 @@ fun hideSoftKeyboard(context: Context, view: View) {
 
 fun showSoftKeyboard(context: Context,view: View) {
     view.requestFocus()
-//    val inputMethodManager =
-//        context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//    inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
     val inputMethodManager =
         context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
-//    val inputMethodManager =
-//        context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//    val v = (context as Activity).currentFocus
-//    inputMethodManager.showSoftInputFromInputMethod(v!!.windowToken, 0)
-
-
 }
 
 fun restartSoftKeyboard(context: Context, view: View) {

@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import androidx.annotation.RequiresApi
 import androidx.emoji2.text.EmojiCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.customkeyboard.R
 import com.example.customkeyboard.databinding.KeyboardEmojiBinding
 import com.example.customkeyboard.lib.common.core.BaseKeyboard
 import com.example.customkeyboard.lib.adapter.EmojiKeyAdapter
@@ -114,8 +115,10 @@ class EmojiKeyboard(
     }
 
     private fun setupEmojiAdapter(emojis: List<String>) {
+
         emojiKeyAdapter = EmojiKeyAdapter()
         binding?.apply {
+            tvToolbarTitle.text = resources.getString(R.string.emojis)
             emojiList.apply {
                 adapter = emojiKeyAdapter
                 layoutManager = GridLayoutManager(context, 6)

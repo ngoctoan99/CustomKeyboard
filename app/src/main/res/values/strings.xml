@@ -7,6 +7,7 @@
     <string name="keycode_enter">Enter</string>
 
     <string name="emojis">Emojis</string>
+    <string name="clipboard">ClipBoard</string>
 
     <string name="welcome">Welcome to Frogo Keyboard</string>
     <string name="enable_and_set_for_default">For using this Frogo Keyboard you need to go to your settings and enable the Frogo Keyboard. After that, when you want to use this Frogo Keyboard, you need to set it for default keyboard.</string>

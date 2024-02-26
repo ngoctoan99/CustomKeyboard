@@ -48,6 +48,7 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
         initialSetupKeyboard()
         binding?.keyboardMain?.mOnKeyboardActionListener = this
         binding?.keyboardEmoji?.mOnKeyboardActionListener = this
+        binding?.keyboardClipboard?.mOnKeyboardActionListener = this
     }
 
     override fun invalidateKeyboard() {
@@ -64,6 +65,7 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
 //            keyboardForm.setInputConnection(currentInputConnection)
             keyboardEmoji.setInputConnection(currentInputConnection)
             keyboardTheme.setInputConnection(currentInputConnection)
+            keyboardClipboard.setInputConnection(currentInputConnection)
 //            keyboardTemplateText.setInputConnection(currentInputConnection)
         }
     }
@@ -172,6 +174,11 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
                 keyboardTheme.visibility = View.GONE
                 showMainKeyboard()
             }
+
+            keyboardClipboard.binding?.toolbarBack?.setOnClickListener {
+                keyboardClipboard.visibility = View.GONE
+                showMainKeyboard()
+            }
         }
     }
 
@@ -198,10 +205,6 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
                         Toast.makeText(baseContext,"Speech recognition is not available",Toast.LENGTH_SHORT).show()
                     }
                     else {
-//                        val intent = Intent(baseContext, TranparentActivity::class.java)
-//                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-//                        intent.putExtra("Click","GGVoice")
-//                        startActivity(intent)
                         val imeManager = applicationContext.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                         val list: List<InputMethodInfo> = imeManager.enabledInputMethodList
                         for (el in list) {
@@ -226,10 +229,12 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
                         override fun onThemeSelect() {
                             setInputView(onCreateInputView())
                         }
-
                     }
                 }
-
+                else if (it.type == "Clipboard"){
+                    hideMainKeyboard()
+                    binding?.keyboardClipboard?.visibility = View.VISIBLE
+                }
             }
         }
 
@@ -249,8 +254,8 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
                 icon = R.drawable.ic_menu_theme
             ),
             KeyboardFeature(
-                type = "Language",
-                icon = R.drawable.ic_menu_language
+                type = "Clipboard",
+                icon = R.drawable.ic_menu_clipboard
             ))
     }
 

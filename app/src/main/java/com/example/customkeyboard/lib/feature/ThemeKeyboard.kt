@@ -11,16 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.example.customkeyboard.databinding.KeyboardImeBinding
 import com.example.customkeyboard.databinding.KeyboardThemeBinding
 import com.example.customkeyboard.lib.adapter.ThemeAdapter
 import com.example.customkeyboard.lib.common.core.BaseKeyboard
 import com.example.customkeyboard.lib.model.KeyboardThemeModel
-import com.example.customkeyboard.lib.ui.main.MainKeyboard
-import com.example.customkeyboard.lib.util.hideSoftKeyboard
-import com.example.customkeyboard.lib.util.restartSoftKeyboard
 import com.example.customkeyboard.lib.util.setBitmap
-import com.example.customkeyboard.lib.util.showSoftKeyboard
 
 class ThemeKeyboard(
     context: Context,
@@ -63,12 +58,12 @@ class ThemeKeyboard(
             themeAdapter!!.notifyDataSetChanged()
             themeAdapter.setItemClickListener {
                //change theme
-                changeKeyboardURL(it.image)
+                changeBachgroundKeyboardURL(it.image)
             }
         }
     }
 
-    fun changeKeyboardURL(linkURL : String){
+    fun changeBachgroundKeyboardURL(linkURL : String){
         Glide.with(this)
             .asBitmap()
             .load(linkURL)
