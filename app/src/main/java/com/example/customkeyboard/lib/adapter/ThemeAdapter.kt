@@ -32,18 +32,6 @@ class ThemeAdapter(): BaseAdapter<KeyboardThemeModel>() {
                 parent,
                 false
             )
-        var width = 0
-        if(list.size > 1){
-            width = parent.measuredWidth/list.size - 40
-        }else {
-            width = 150
-        }
-        val params = RecyclerView.LayoutParams(
-            width,
-            binding.root.resources.getDimension(R.dimen.frogo_dimen_64dp).toInt()
-        )
-        params.setMargins(20, 0, 20, 0)
-        binding.root.layoutParams  = params
         return ThemeItemHolder(binding)
 
 

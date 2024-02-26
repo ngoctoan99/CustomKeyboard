@@ -25,6 +25,7 @@ import com.example.customkeyboard.TranparentActivity
 import com.example.customkeyboard.databinding.KeyboardImeBinding
 import com.example.customkeyboard.lib.adapter.FeatureAdapter
 import com.example.customkeyboard.lib.common.core.BaseKeyboardIME
+import com.example.customkeyboard.lib.feature.ThemeSelect
 import com.example.customkeyboard.lib.model.KeyboardFeature
 import com.example.customkeyboard.lib.util.loadLanguageKeyBoardData
 import java.util.Locale
@@ -221,6 +222,12 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
                 else if(it.type == "Theme"){
                     hideMainKeyboard()
                     binding?.keyboardTheme?.visibility = View.VISIBLE
+                    binding?.keyboardTheme?.themeSelect = object : ThemeSelect{
+                        override fun onThemeSelect() {
+                            setInputView(onCreateInputView())
+                        }
+
+                    }
                 }
 
             }

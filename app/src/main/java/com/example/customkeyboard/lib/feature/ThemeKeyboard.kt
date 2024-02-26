@@ -16,14 +16,18 @@ import com.example.customkeyboard.databinding.KeyboardThemeBinding
 import com.example.customkeyboard.lib.adapter.ThemeAdapter
 import com.example.customkeyboard.lib.common.core.BaseKeyboard
 import com.example.customkeyboard.lib.model.KeyboardThemeModel
+import com.example.customkeyboard.lib.ui.main.MainKeyboard
+import com.example.customkeyboard.lib.util.hideSoftKeyboard
 import com.example.customkeyboard.lib.util.restartSoftKeyboard
+import com.example.customkeyboard.lib.util.setBitmap
+import com.example.customkeyboard.lib.util.showSoftKeyboard
 
 class ThemeKeyboard(
     context: Context,
     attrs: AttributeSet?,
 ) : BaseKeyboard<KeyboardThemeBinding>(context, attrs) {
     private lateinit var themeAdapter : ThemeAdapter
-//    private lateinit var bindings : KeyboardImeBinding
+    lateinit var themeSelect : ThemeSelect
     override fun setupViewBinding(): KeyboardThemeBinding {
         return KeyboardThemeBinding.inflate(LayoutInflater.from(context), this, true)
     }
@@ -31,7 +35,6 @@ class ThemeKeyboard(
     override fun onCreate() {
         setupRv(getDataFake())
         initView()
-//        bindings = KeyboardImeBinding.inflate(LayoutInflater.from(context), this, true)
     }
 
     private fun initView() {
@@ -60,7 +63,7 @@ class ThemeKeyboard(
             themeAdapter!!.notifyDataSetChanged()
             themeAdapter.setItemClickListener {
                //change theme
-
+                changeKeyboardURL(it.image)
             }
         }
     }
@@ -72,8 +75,8 @@ class ThemeKeyboard(
             .into(object : CustomTarget<Bitmap>(){
                 @RequiresApi(Build.VERSION_CODES.O)
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-//                    bindings.keyboardMain.changeBackgroundBitmap(resource)
-                    restartSoftKeyboard(context,binding!!.root)
+                    setBitmap(context,resource)
+                    themeSelect.onThemeSelect()
                 }
                 override fun onLoadCleared(placeholder: Drawable?) {
                     // this is called when imageView is cleared on lifecycle call or for
@@ -84,4 +87,7 @@ class ThemeKeyboard(
             })
     }
 
+}
+interface ThemeSelect{
+    fun onThemeSelect()
 }

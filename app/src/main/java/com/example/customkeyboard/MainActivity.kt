@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         bindings = KeyboardImeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        showSoftKeyboard(this,binding.root)
+        showSoftKeyboard(this,binding.edtText)
         registerReceiver(receiver, IntentFilter("com.example.customkeyboard.CUSTOM_BROADCAST"))
 
         // first display
@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
 
     fun refreshUIKeyboard(){
         hideSoftKeyboard(this,binding.edtText)
-        showSoftKeyboard(this,binding.edtText)
+//        showSoftKeyboard(this)
     }
 
     fun changeKeyboardURL(linkURL : String){

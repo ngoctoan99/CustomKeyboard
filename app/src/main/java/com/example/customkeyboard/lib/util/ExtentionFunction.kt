@@ -1,10 +1,17 @@
 package com.example.customkeyboard.lib.util
 
+import android.app.Activity
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.RequiresApi
 import com.example.customkeyboard.R
+import java.io.ByteArrayOutputStream
+import java.util.Base64
 
 
 private val SHARED_PREFS = "sharedPrefs"
@@ -43,16 +50,27 @@ fun loadLanguageKeyBoardData(context: Context): Int {
 fun hideSoftKeyboard(context: Context, view: View) {
     val inputMethodManager =
         context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    val v = (context as Activity).currentFocus
+    if(v == null)
+        return
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+
 }
 
-fun showSoftKeyboard(context: Context, view: View) {
+fun showSoftKeyboard(context: Context,view: View) {
+    view.requestFocus()
 //    val inputMethodManager =
 //        context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 //    inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
     val inputMethodManager =
         context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+//    val inputMethodManager =
+//        context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//    val v = (context as Activity).currentFocus
+//    inputMethodManager.showSoftInputFromInputMethod(v!!.windowToken, 0)
+
+
 }
 
 fun restartSoftKeyboard(context: Context, view: View) {
@@ -61,3 +79,26 @@ fun restartSoftKeyboard(context: Context, view: View) {
     inputMethodManager.restartInput(view)
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
+fun setBitmap(context : Context, bitmap : Bitmap){
+    val sharedPreferences = context.getSharedPreferences("MySharedPreferences", Context.MODE_PRIVATE)
+    val editor = sharedPreferences.edit()
+    val byteArrayOutputStream = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+    val bitmapBytes = byteArrayOutputStream.toByteArray()
+    editor.putString("my_image", Base64.getEncoder().encodeToString(bitmapBytes))
+    editor.apply()
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getBitmap(context : Context) : Bitmap?{
+    val sharedPreferences = context.getSharedPreferences("MySharedPreferences", Context.MODE_PRIVATE)
+    val bitmapString = sharedPreferences.getString("my_image", null)
+    if (bitmapString != null) {
+        val bitmapBytes = Base64.getDecoder().decode(bitmapString.toString())
+        val bitmap = BitmapFactory.decodeByteArray(bitmapBytes, 0, bitmapBytes.size)
+        return bitmap
+    }else {
+        return null
+    }
+}

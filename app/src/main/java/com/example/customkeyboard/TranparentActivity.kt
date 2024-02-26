@@ -25,7 +25,7 @@ class TranparentActivity:AppCompatActivity() {
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             Log.d("TTTT","${data.toString()}")
-            showSoftKeyboard(this,binding.root)
+//            showSoftKeyboard(this)
             val intent = Intent()
             intent.action = "com.example.customkeyboard.CUSTOM_BROADCAST1"
             intent.putExtra("dataVoice", "${data.toString()}")
@@ -33,7 +33,7 @@ class TranparentActivity:AppCompatActivity() {
             sendBroadcast(intent)
         }
         else if(result.resultCode == Activity.RESULT_CANCELED){
-            showSoftKeyboard(this,binding.root)
+//            showSoftKeyboard(this)
             finish()
         }
     }

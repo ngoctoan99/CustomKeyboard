@@ -45,6 +45,8 @@ import com.example.customkeyboard.lib.ui.main.ItemMainKeyboard.Companion.MAX_KEY
 import com.example.customkeyboard.lib.ui.main.ItemMainKeyboard.Companion.SHIFT_OFF
 import com.example.customkeyboard.lib.ui.main.ItemMainKeyboard.Companion.SHIFT_ON_ONE_CHAR
 import com.example.customkeyboard.lib.ui.main.ItemMainKeyboard.Companion.SHIFT_ON_PERMANENT
+import com.example.customkeyboard.lib.util.getBitmap
+import com.example.customkeyboard.lib.util.setBitmap
 import java.io.ByteArrayOutputStream
 import java.util.*
 import kotlin.math.floor
@@ -291,10 +293,12 @@ class MainKeyboard @JvmOverloads constructor(
                 if(imageBitmap != null){
                     val drawable = BitmapDrawable(resources,imageBitmap)
                     background = drawable
+                    invalidate()
                 }
                 else {
                     val drawable = ContextCompat.getDrawable(context, R.drawable.background1)
                     background = drawable
+                    invalidate()
 
                 }
             }
@@ -330,28 +334,7 @@ class MainKeyboard @JvmOverloads constructor(
     fun changeBackgroundBitmap(bitmap : Bitmap){
         setBitmap(context,bitmap)
     }
-    fun setBitmap(context : Context, bitmap : Bitmap){
-        val sharedPreferences = context.getSharedPreferences("MySharedPreferences", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-        val bitmapBytes = byteArrayOutputStream.toByteArray()
-        editor.putString("my_image", Base64.getEncoder().encodeToString(bitmapBytes))
-        editor.apply()
-    }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun getBitmap(context : Context) : Bitmap?{
-        val sharedPreferences = context.getSharedPreferences("MySharedPreferences", Context.MODE_PRIVATE)
-        val bitmapString = sharedPreferences.getString("my_image", null)
-        if (bitmapString != null) {
-            val bitmapBytes = Base64.getDecoder().decode(bitmapString.toString())
-            val bitmap = BitmapFactory.decodeByteArray(bitmapBytes, 0, bitmapBytes.size)
-            return bitmap
-        }else {
-            return null
-        }
-    }
 
     fun vibrateIfNeeded() {
         if (ItemMainKeyboard.VIBRATE_ON_KEYPRESS) {
