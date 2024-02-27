@@ -246,6 +246,8 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
                 else if (it.type == "Navigator"){
                     hideMainKeyboard()
                     binding?.keyboardNavigator?.visibility = View.VISIBLE
+                    val currentInputConnectionNotNull = currentInputConnection ?: return@setItemClickListener
+                    binding?.keyboardNavigator?.onClick(currentInputConnectionNotNull)
                 }
             }
         }

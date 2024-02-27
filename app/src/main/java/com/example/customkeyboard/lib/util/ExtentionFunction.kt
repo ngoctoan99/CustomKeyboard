@@ -110,3 +110,6 @@ fun getDataClipboardLocal(context : Context) : ArrayList<String>{
     val dataClipboard: ArrayList<String> = gson.fromJson(json, type)
     return dataClipboard
 }
+
+
+

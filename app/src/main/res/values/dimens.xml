@@ -112,6 +112,7 @@
     <dimen name="frogo_dimen_28dp">28dp</dimen>
     <dimen name="frogo_dimen_2dp">2dp</dimen>
     <dimen name="frogo_dimen_5dp">5dp</dimen>
+    <dimen name="frogo_dimen_25dp">25dp</dimen>
     <dimen name="frogo_dimen_30dp">30dp</dimen>
     <dimen name="frogo_dimen_32dp">32dp</dimen>
     <dimen name="frogo_dimen_34dp">34dp</dimen>
