@@ -32,26 +32,32 @@ class ClipBoardKeyboard(
     override fun onCreate() {
     }
 
-    fun getDataClipboard():List<String>{
-        var list :ArrayList<String> = ArrayList()
-        if(getDataClipboardLocal(context).size > 0){
-            list = getDataClipboardLocal(context)
-        }
+    fun getDataClipboard(): List<String> {
+        var list: ArrayList<String> = ArrayList()
+//        if (getDataClipboardLocal(context).size > 0) {
+//            list = getDataClipboardLocal(context)
+//        }
         val clipboard = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-        clipboard.addPrimaryClipChangedListener {
-            val clipData = clipboard.primaryClip
-            if (clipData != null && clipData.itemCount > 0) {
-                for(i in 0 until clipData.itemCount){
-                    val item = clipData.getItemAt(i)
+        val clipData = clipboard.primaryClip
+        if (clipData != null && clipData.itemCount > 0) {
+            for (i in 0 until clipData.itemCount) {
+                val item = clipData.getItemAt(i)
+                if (getDataClipboardLocal(context).size > 0) {
+                    list = getDataClipboardLocal(context)
+                    if (!item.text.equals(list[list.size - 1])) {
+                        list.add(item.text.toString())
+                        saveDataClipboardLocal(context, list)
+                    }
+                } else {
                     list.add(item.text.toString())
-                    saveDataClipboardLocal(context,list)
-                    Log.d("TTT c","${item.text.toString()} ${clipData.itemCount}")
+                    saveDataClipboardLocal(context, list)
                 }
             }
         }
         return list
 
     }
+
     fun setupClipboardAdapter(data: List<String>) {
         binding?.apply {
             tvToolbarTitle.text = resources.getString(R.string.clipboard)

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tvClipboard"
     android:layout_width="match_parent"
+    android:textColor="@color/white"
     android:layout_height="wrap_content"
     android:background="@drawable/keyboard_clipboard_bg"
     android:gravity="center"

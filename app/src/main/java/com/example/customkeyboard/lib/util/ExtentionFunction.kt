@@ -46,7 +46,7 @@ fun saveLanguageKeyBoardData(context: Context, number: Int) {
 fun loadLanguageKeyBoardData(context: Context): Int {
     val sharedPreferences =
         context.getSharedPreferences(SHARED_PREFS1, MODE_PRIVATE)
-    return sharedPreferences.getInt(KEY1, R.xml.keys_letters_bengali)
+    return sharedPreferences.getInt(KEY1, R.xml.keys_letters_qwerty)
 }
 
 fun hideSoftKeyboard(context: Context, view: View) {
