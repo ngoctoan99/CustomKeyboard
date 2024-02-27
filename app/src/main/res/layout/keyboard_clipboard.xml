@@ -56,20 +56,6 @@
             android:scrollbars="vertical"
             tools:itemCount="4"/>
 
-        <!--        <View-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="@dimen/frogo_dimen_1dp"-->
-        <!--            android:background="@color/bg_card_reverse" />-->
-
-        <!--        <androidx.recyclerview.widget.RecyclerView-->
-        <!--            android:id="@+id/emoji_category_list"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:padding="@dimen/frogo_dimen_4dp"-->
-        <!--            tools:itemCount="1"-->
-        <!--            android:background="@color/frogoColorBlue"-->
-        <!--            tools:listitem="@layout/item_keyboard_emoji" />-->
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -49,6 +49,7 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
         binding?.keyboardMain?.mOnKeyboardActionListener = this
         binding?.keyboardEmoji?.mOnKeyboardActionListener = this
         binding?.keyboardClipboard?.mOnKeyboardActionListener = this
+        binding?.keyboardNavigator?.mOnKeyboardActionListener = this
     }
 
     override fun invalidateKeyboard() {
@@ -67,6 +68,7 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
             keyboardEmoji.setInputConnection(currentInputConnectionNotNull)
             keyboardTheme.setInputConnection(currentInputConnectionNotNull)
             keyboardClipboard.setInputConnection(currentInputConnectionNotNull)
+            keyboardNavigator.setInputConnection(currentInputConnectionNotNull)
 //            keyboardTemplateText.setInputConnection(currentInputConnection)
         }
     }
@@ -180,6 +182,10 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
                 keyboardClipboard.visibility = View.GONE
                 showMainKeyboard()
             }
+            keyboardNavigator.binding?.toolbarBack?.setOnClickListener {
+                keyboardNavigator.visibility = View.GONE
+                showMainKeyboard()
+            }
         }
     }
 
@@ -237,6 +243,10 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
                     binding?.keyboardClipboard?.visibility = View.VISIBLE
                     binding?.keyboardClipboard?.setupClipboardAdapter(binding?.keyboardClipboard?.getDataClipboard()!!)
                 }
+                else if (it.type == "Navigator"){
+                    hideMainKeyboard()
+                    binding?.keyboardNavigator?.visibility = View.VISIBLE
+                }
             }
         }
 
@@ -248,8 +258,8 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
                 icon = R.drawable.ic_menu_voice
             ),
             KeyboardFeature(
-                type = "AppKeyboard",
-                icon = R.drawable.ic_menu_pool_keyboard
+                type = "Navigator",
+                icon = R.drawable.ic_menu_control
             ),
             KeyboardFeature(
                 type = "Theme",
