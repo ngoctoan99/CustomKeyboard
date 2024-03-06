@@ -42,9 +42,12 @@ class ClipBoardKeyboard(
         if (clipData != null && clipData.itemCount > 0) {
             for (i in 0 until clipData.itemCount) {
                 val item = clipData.getItemAt(i)
+                if(item.text.isEmpty()) {
+                    return getDataClipboardLocal(context)
+                }
                 if (getDataClipboardLocal(context).size > 0) {
                     list = getDataClipboardLocal(context)
-                    if (!item.text.equals(list[list.size - 1])) {
+                    if (item.text.toString() != list[list.size - 1]) {
                         list.add(item.text.toString())
                         saveDataClipboardLocal(context, list)
                     }

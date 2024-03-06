@@ -9,6 +9,7 @@ import android.graphics.*
 import android.graphics.Paint.Align
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.os.Build
 import android.os.Handler
@@ -511,7 +512,7 @@ class MainKeyboard @JvmOverloads constructor(
             val label = adjustCase(key.label)?.toString()
             val bounds = keyBackground!!.bounds
             if (key.width != bounds.right || key.height != bounds.bottom) {
-                keyBackground.setBounds(0, 0, key.width, key.height)
+                keyBackground.setBounds(3, 3, key.width, key.height)
             }
 
             keyBackground.state = when {

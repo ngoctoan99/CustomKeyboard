@@ -28,7 +28,6 @@ import com.example.customkeyboard.lib.common.core.BaseKeyboardIME
 import com.example.customkeyboard.lib.feature.ThemeSelect
 import com.example.customkeyboard.lib.model.KeyboardFeature
 import com.example.customkeyboard.lib.util.loadLanguageKeyBoardData
-import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
@@ -106,6 +105,8 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
             keyboardEmoji.binding?.emojiList?.scrollToPosition(0)
             mockMeasureHeightKeyboard.visibility = View.GONE
             keyboardTheme.visibility = View.GONE
+            keyboardClipboard.visibility = View.GONE
+            keyboardNavigator.visibility = View.GONE
 
         }
     }
@@ -113,6 +114,9 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
     override fun showOnlyKeyboard() {
 //        binding?.keyboardMain?.visible()
         binding?.keyboardMain?.visibility = View.VISIBLE
+        binding?.keyboardNavigator?.visibility = View.GONE
+        binding?.keyboardClipboard?.visibility = View.GONE
+        binding?.keyboardTheme?.visibility = View.GONE
     }
 
     override fun hideOnlyKeyboard() {
@@ -122,12 +126,12 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
 
     override fun EditText.showKeyboardExt() {
         setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
+            if (hasFocus ) {
                 showOnlyKeyboard()
             }
         }
         setOnClickListener {
-            showOnlyKeyboard()
+                showOnlyKeyboard()
         }
     }
 
@@ -185,6 +189,7 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
             keyboardNavigator.binding?.toolbarBack?.setOnClickListener {
                 keyboardNavigator.visibility = View.GONE
                 showMainKeyboard()
+
             }
         }
     }
@@ -202,6 +207,7 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
             featureAdapter.notifyDataSetChanged()
             featureAdapter.setItemClickListener {
                 if(it.type == "AppKeyboard"){
+
                     val launchIntent: Intent? =
                         binding!!.root.context.packageManager.getLaunchIntentForPackage("com.example.customkeyboard")
                     launchIntent!!.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -244,6 +250,7 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
                     binding?.keyboardClipboard?.setupClipboardAdapter(binding?.keyboardClipboard?.getDataClipboard()!!)
                 }
                 else if (it.type == "Navigator"){
+
                     hideMainKeyboard()
                     binding?.keyboardNavigator?.visibility = View.VISIBLE
                     val currentInputConnectionNotNull = currentInputConnection ?: return@setItemClickListener

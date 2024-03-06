@@ -100,7 +100,7 @@ class NavigatorKeyboard(
 //                val inputConnection = currentInputConnection ?: return@setOnClickListener
                 inputConnection.sendKeyEvent(
                     KeyEvent(
-                        KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_DOWN
+                        KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_UP
                     )
                 )
             }
